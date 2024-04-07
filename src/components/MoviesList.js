@@ -5,10 +5,10 @@ import Sort from './Sort';
 import Favorites from './Favorites';
 
 const MoviesList = () => {
-  const [movies, setMovies] = useState(moviesData);
+  const [movies, setMovies] = useState(moviesData); // 直接使用moviesData作为初始状态
   const [genre, setGenre] = useState('');
   const [yearRange, setYearRange] = useState('');
-  const [sortOrder, setSortOrder] = useState('desc');
+  const [sortOrder, setSortOrder] = useState(''); // 初始不设置排序顺序
   const [favorites, setFavorites] = useState([]);
 
   const updateGenreFilter = (selectedGenre) => {
@@ -38,7 +38,9 @@ const MoviesList = () => {
       return matchGenre && matchYear;
     });
 
-    filtered.sort((a, b) => (order === 'asc' ? a.rating - b.rating : b.rating - a.rating));
+    if (order) {
+      filtered.sort((a, b) => (order === 'asc' ? a.rating - b.rating : b.rating - a.rating));
+    }
 
     setMovies(filtered);
   };
@@ -65,15 +67,15 @@ const MoviesList = () => {
 
   return (
     <div>
-    <div className="controls-container">
-      <Filter
-        updateGenreFilter={updateGenreFilter}
-        updateYearFilter={updateYearFilter}
-        selectedGenre={genre}
-        selectedYearRange={yearRange}
-      />
-      <Sort updateSortOrder={updateSortOrder} sortOrder={sortOrder}/>
-      <button onClick={reset}>Reset</button>
+      <div className="controls-container">
+        <Filter
+          updateGenreFilter={updateGenreFilter}
+          updateYearFilter={updateYearFilter}
+          selectedGenre={genre}
+          selectedYearRange={yearRange}
+        />
+        <Sort updateSortOrder={updateSortOrder} sortOrder={sortOrder} />
+        <button onClick={reset}>Reset</button>
       </div>
       <Favorites favorites={favorites} clearFavorites={clearFavorites} removeFavorite={removeFavorite} />
       <div className="movies-list">
